@@ -1,0 +1,494 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+#root{position:relative;min-height:500px}
+
+#lang-screen{padding:28px 18px;text-align:center;min-height:480px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+#map-bg{position:absolute;inset:0;overflow:hidden;opacity:.09;pointer-events:none}
+.lg{font-size:21px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.lgsub{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.lgrole{font-size:11px;color:#27500A;background:#EAF3DE;border-radius:10px;padding:2px 11px;margin-bottom:20px;display:inline-block}
+.lbts{display:flex;gap:10px;margin-bottom:20px}
+.lbt{padding:10px 28px;font-size:13px;font-weight:500;cursor:pointer;border-radius:var(--border-radius-lg);border:2px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);transition:border-color .15s,background .15s}
+.lbt:hover,.lbt.act{border-color:#3B6D11;background:#EAF3DE;color:#27500A}
+.ibox{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 16px;max-width:440px;text-align:left;margin-bottom:16px}
+.ibt{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:5px}
+.ibb{font-size:11px;color:var(--color-text-secondary);line-height:1.6;white-space:pre-line}
+.sbtn{padding:10px 36px;font-size:14px;font-weight:500;cursor:pointer;border-radius:var(--border-radius-lg);background:#3B6D11;color:#EAF3DE;border:none;margin-bottom:16px}
+.sbtn:hover{background:#27500A}
+.abox{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px;max-width:440px;width:100%;text-align:left}
+.albl{font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.anames{font-size:12px;font-weight:500;color:var(--color-text-primary);line-height:1.7}
+.asub{font-size:11px;color:var(--color-text-secondary);margin-top:3px}
+.cs-badge{font-size:10px;color:#0C447C;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:8px;padding:2px 8px;margin-top:5px;display:inline-block}
+
+#game-screen{display:none;padding:0}
+.kzh{position:relative;width:100%;height:112px;overflow:hidden;background:#E6F1FB}
+.kzh svg{width:100%;height:100%}
+.hov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 16px}
+.hr{font-size:10px;color:#185FA5;margin-bottom:2px}
+.ht{font-size:15px;font-weight:500;color:#042C53}
+.htp{display:inline-block;font-size:10px;color:#27500A;background:#C0DD97;border-radius:10px;padding:2px 8px;margin-top:3px}
+
+.cnt{padding:11px 13px}
+.sr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:9px}
+.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:7px 8px;text-align:center}
+.scl{font-size:10px;color:var(--color-text-secondary);margin-bottom:2px}
+.scv{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.brs{margin-bottom:9px}
+.br{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.bn{font-size:10px;color:var(--color-text-secondary);width:66px;flex-shrink:0}
+.bt2{flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
+.bf{height:100%;border-radius:3px;transition:width .5s ease}
+.bfe{background:#3B6D11}.bfp{background:#185FA5}.bfg{background:#854F0B}
+.bfe.w,.bfp.w,.bfg.w{background:#BA7517}
+.bfe.d,.bfp.d,.bfg.d{background:#A32D2D}
+.bpct{font-size:10px;font-weight:500;color:var(--color-text-primary);width:25px;text-align:right}
+
+.rs{border-radius:var(--border-radius-md);padding:5px 9px;margin-bottom:9px;font-size:11px;display:flex;align-items:center;gap:6px}
+.rsok{background:#EAF3DE;color:#27500A;border:0.5px solid #C0DD97}
+.rsw{background:#FAEEDA;color:#633806;border:0.5px solid #FAC775}
+.rsc{background:#FCEBEB;color:#791F1F;border:0.5px solid #F7C1C1}
+
+.evc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 12px;margin-bottom:8px}
+.evt{font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.evx{font-size:12px;line-height:1.5;color:var(--color-text-primary);margin-bottom:5px}
+.eva{font-size:11px;color:var(--color-text-secondary);background:var(--color-background-secondary);padding:4px 8px;border-left:2px solid var(--color-border-secondary)}
+
+.cqb{border-radius:var(--border-radius-lg);padding:10px 12px;margin-bottom:8px;display:none}
+.cqg{background:#EAF3DE;border:0.5px solid #C0DD97}
+.cqbad{background:#FCEBEB;border:0.5px solid #F7C1C1}
+.cqm{background:#FAEEDA;border:0.5px solid #FAC775}
+.cqt{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.cqd{font-size:11px;line-height:1.5;color:var(--color-text-primary)}
+.cql{font-size:10px;color:var(--color-text-secondary);margin-top:4px;font-style:italic}
+
+.chg{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px}
+.ch{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px;cursor:pointer;text-align:left;transition:border-color .15s,transform .1s}
+.ch:hover{border-color:var(--color-border-primary);transform:translateY(-1px)}
+.ch:active{transform:scale(.98)}
+.ch.off{opacity:.4;pointer-events:none}
+.chn{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4}
+.chc{font-size:10px;color:var(--color-text-secondary);margin-bottom:5px}
+.cht{display:flex;flex-wrap:wrap;gap:2px}
+.tg{font-size:10px;padding:2px 5px;border-radius:7px;font-weight:500}
+.tpe{background:#EAF3DE;color:#27500A}.tne{background:#FCEBEB;color:#791F1F}
+.tpp{background:#E6F1FB;color:#0C447C}.tnp{background:#FCEBEB;color:#791F1F}
+.tpg{background:#FAEEDA;color:#633806}.tng{background:#FCEBEB;color:#791F1F}
+.tpm{background:#EAF3DE;color:#27500A}.tnm{background:#FCEBEB;color:#791F1F}
+.trsk{background:#F4C0D1;color:#72243E}
+
+.nb{width:100%;padding:7px;font-size:12px;cursor:pointer;border-radius:var(--border-radius-md);display:none;margin-bottom:8px}
+.hw{margin-top:3px}
+.hl{font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.hi{font-size:10px;color:var(--color-text-secondary);padding:3px 6px;background:var(--color-background-secondary);border-radius:3px;display:flex;justify-content:space-between;margin-bottom:2px}
+.hb{font-size:9px;padding:1px 4px;border-radius:6px}
+
+#end-screen{display:none;padding:0}
+.ea{width:100%;height:240px;overflow:hidden}
+.ec2{padding:13px 16px}
+.et{font-size:17px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.es{font-size:12px;color:var(--color-text-secondary);line-height:1.5;margin-bottom:12px}
+.esb{font-size:32px;font-weight:500;color:var(--color-text-primary)}
+.esl{font-size:11px;color:var(--color-text-secondary);margin-bottom:12px}
+.esr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:14px}
+.end-auth{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:14px;text-align:center}
+.eal{font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.ean{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1.7}
+.eas{font-size:11px;color:var(--color-text-secondary);margin-top:3px}
+.cs-end{font-size:11px;color:#0C447C;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:8px;padding:3px 10px;margin-top:5px;display:inline-block}
+.dlt{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:7px}
+.dli{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 10px;margin-bottom:5px}
+.dle{font-size:10px;color:var(--color-text-secondary);margin-bottom:2px}
+.dlc{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.dlb{font-size:10px;color:var(--color-text-secondary);line-height:1.4}
+.dlf{display:flex;flex-wrap:wrap;gap:2px;margin-top:3px}
+</style>
+
+<h2 style="position:absolute;left:-9999px">EcoCountry: Qazaqstan 2026 — симулятор министра экологии</h2>
+<div id="root">
+
+<div id="lang-screen">
+  <div id="map-bg">
+    <svg viewBox="0 0 680 480" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <path d="M55,210 L110,185 L165,175 L225,164 L290,156 L350,151 L410,148 L470,152 L530,149 L590,158 L635,172 L650,200 L635,228 L605,248 L568,268 L522,280 L474,286 L424,291 L374,288 L324,285 L274,288 L224,284 L178,275 L138,258 L100,236 L72,218 Z" fill="#3B6D11" opacity=".2"/>
+      <ellipse cx="195" cy="242" rx="28" ry="10" fill="#1D9E75" opacity=".22"/>
+      <ellipse cx="445" cy="222" rx="22" ry="8" fill="#1D9E75" opacity=".18"/>
+      <circle cx="340" cy="218" r="5" fill="#3B6D11" opacity=".35"/>
+      <circle cx="340" cy="218" r="16" fill="none" stroke="#3B6D11" stroke-width="1" opacity=".18"/>
+    </svg>
+  </div>
+  <div class="lg">EcoCountry: Qazaqstan</div>
+  <div class="lgsub" id="ls-sub">Тілді таңдаңыз / Выберите язык</div>
+  <div class="lgrole" id="ls-role">Министр симуляторы / Симулятор министра</div>
+  <div class="lbts">
+    <button class="lbt" onclick="setLang('kz',event)">Қазақша</button>
+    <button class="lbt" onclick="setLang('ru',event)">Русский</button>
+  </div>
+  <div class="ibox">
+    <div class="ibt" id="inst-t">Нұсқаулық</div>
+    <div class="ibb" id="inst-b">Сіз — Қазақстан Республикасының Экология және табиғи ресурстар министрісіз.
+
+12 шешім қабылдайсыз: экология, су, энергетика, климат, әлеуметтік мәселелер бойынша.
+
+Үш шкаланы бақылайсыз: Экология, Халық, Басқару. Кез келгені нөлге жетсе — тәжірибе аяқталады.
+
+Дұрыс жауап жоқ. Кейбір шешімдер кейінірек зардаптарын береді.</div>
+  </div>
+  <button class="sbtn" id="start-btn" onclick="startGame()">Бастау</button>
+  <div class="abox">
+    <div class="albl" id="auth-lbl">Авторлар / Авторы</div>
+    <div class="anames">Умутчакова Аяжан · Алсарұлы Ерғазы</div>
+    <div class="asub" id="auth-sub">EcoCountry: Qazaqstan · 2026</div>
+    <div class="cs-badge">Special for Creative Start</div>
+  </div>
+</div>
+
+<div id="game-screen">
+  <div class="kzh">
+    <svg viewBox="0 0 680 112" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <rect width="680" height="112" fill="#E6F1FB"/>
+      <path d="M0,78 L55,65 L120,60 L195,56 L268,53 L340,51 L412,53 L485,56 L558,61 L630,68 L680,76 L680,112 L0,112 Z" fill="#C0DD97" opacity=".5"/>
+      <path d="M0,90 L80,80 L175,75 L270,72 L340,71 L410,72 L505,76 L600,82 L680,90 L680,112 L0,112 Z" fill="#97C459" opacity=".38"/>
+      <path d="M0,104 L120,99 L250,97 L340,96 L430,97 L560,100 L680,106 L680,112 L0,112 Z" fill="#639922" opacity=".42"/>
+      <ellipse cx="160" cy="72" rx="18" ry="6" fill="#1D9E75" opacity=".2"/>
+      <ellipse cx="390" cy="64" rx="16" ry="5" fill="#1D9E75" opacity=".16"/>
+      <ellipse cx="520" cy="75" rx="13" ry="4" fill="#1D9E75" opacity=".16"/>
+    </svg>
+    <div class="hov">
+      <div class="hr" id="g-role">Экология және табиғи ресурстар министрі</div>
+      <div class="ht">EcoCountry: Qazaqstan</div>
+      <div><span class="htp" id="g-turn">1 / 12</span></div>
+    </div>
+  </div>
+  <div class="cnt">
+    <div class="sr">
+      <div class="sc"><div class="scl" id="sl-eco">Экология</div><div class="scv" id="sv-eco">60%</div></div>
+      <div class="sc"><div class="scl" id="sl-ppl">Халық</div><div class="scv" id="sv-ppl">70%</div></div>
+      <div class="sc"><div class="scl" id="sl-gov">Басқару</div><div class="scv" id="sv-gov">65%</div></div>
+      <div class="sc"><div class="scl" id="sl-mon">Бюджет</div><div class="scv" id="sv-mon">50 млрд</div></div>
+    </div>
+    <div class="brs">
+      <div class="br"><span class="bn" id="bl-eco">Экология</span><div class="bt2"><div class="bf bfe" id="bar-eco" style="width:60%"></div></div><span class="bpct" id="bp-eco">60%</span></div>
+      <div class="br"><span class="bn" id="bl-ppl">Халық</span><div class="bt2"><div class="bf bfp" id="bar-ppl" style="width:70%"></div></div><span class="bpct" id="bp-ppl">70%</span></div>
+      <div class="br"><span class="bn" id="bl-gov">Басқару</span><div class="bt2"><div class="bf bfg" id="bar-gov" style="width:65%"></div></div><span class="bpct" id="bp-gov">65%</span></div>
+    </div>
+    <div class="rs rsok" id="risk-s"><i class="ti ti-shield-check" aria-hidden="true"></i><span id="risk-t">Тұрақты. Ұзақ мерзімді салдарды ескеріңіз.</span></div>
+    <div class="evc"><div class="evt" id="ev-tag"></div><div class="evx" id="ev-txt"></div><div class="eva" id="ev-adv"></div></div>
+    <div class="cqb" id="cqb"><div class="cqt" id="cqt"></div><div class="cqd" id="cqd"></div><div class="cql" id="cql"></div></div>
+    <div class="chg" id="chg"></div>
+    <button class="nb" id="nb"></button>
+    <div class="hw"><div class="hl" id="hl-lbl"></div><div id="hlist"></div></div>
+  </div>
+</div>
+
+<div id="end-screen">
+  <div class="ea"><canvas id="ec" width="680" height="240" style="width:100%;height:100%"></canvas></div>
+  <div class="ec2">
+    <div class="et" id="end-t"></div>
+    <div class="es" id="end-s"></div>
+    <div class="esb" id="end-sc"></div>
+    <div class="esl" id="end-sl"></div>
+    <div class="esr" id="end-sr"></div>
+    <div class="end-auth">
+      <div class="eal" id="end-aut-lbl">Авторлар</div>
+      <div class="ean">Умутчакова Аяжан · Алсарұлы Ерғазы</div>
+      <div class="eas">EcoCountry: Qazaqstan · 2026</div>
+      <div class="cs-end">Special for Creative Start</div>
+    </div>
+    <button onclick="restart()" style="padding:8px 22px;font-size:12px;cursor:pointer;border-radius:var(--border-radius-md);margin-bottom:14px" id="rbtn"></button>
+    <div class="dlt" id="dlt"></div>
+    <div id="dlist"></div>
+  </div>
+</div>
+</div>
+
+<script>
+const TX={
+  kz:{role:"Экология және табиғи ресурстар министрі",it:"Нұсқаулық",ib:"Сіз — Қазақстан Республикасының Экология және табиғи ресурстар министрісіз.\n\n12 шешім қабылдайсыз: экология, су, энергетика, климат, әлеуметтік мәселелер бойынша.\n\nҮш шкаланы бақылайсыз: Экология, Халық, Басқару. Кез келгені нөлге жетсе — тәжірибе аяқталады.\n\nДұрыс жауап жоқ. Кейбір шешімдер кейінірек зардаптарын береді.",start:"Бастау",turn:"/ 12",eco:"Экология",ppl:"Халық",gov:"Басқару",mon:"Бюджет",stable:"Тұрақты. Ұзақ мерзімді салдарды ескеріңіз.",warn:"Назар аудар: тепе-теңдік бұзылуда.",crit:"Дағдарыс! Бір шкала апатқа жақын.",hist:"Шешімдер тарихы",next:"Келесі →",fnext:"Қорытынды →",restart:"Қайта бастау",dlt:"Шешімдердің толық тізімі",pts:"ұпай",sof:"1000 ұпайдан",adv:"Кеңесші",authlbl:"Авторлар"},
+  ru:{role:"Министр экологии и природных ресурсов РК",it:"Инструкция",ib:"Вы — Министр экологии и природных ресурсов Республики Казахстан.\n\n12 решений: экология, вода, энергетика, климат, социальные вопросы.\n\nТри шкалы: Экология, Люди, Управление. Если одна упадёт до нуля — игра завершается.\n\nПравильных ответов нет. Некоторые решения аукнутся позже.",start:"Начать",turn:"/ 12",eco:"Экология",ppl:"Люди",gov:"Управление",mon:"Бюджет",stable:"Стабильно. Думайте о долгосрочных последствиях.",warn:"Внимание: баланс нестабилен.",crit:"Кризис! Одна шкала близка к нулю.",hist:"История решений",next:"Следующий →",fnext:"Итоги →",restart:"Начать заново",dlt:"Журнал решений",pts:"оч.",sof:"очков из 1000",adv:"Советник",authlbl:"Авторы"}
+};
+
+const SC={
+  kz:[
+    {tag:"Энергетика",txt:"Балқаш ЖЭС-і қаланың 65% электрін беретін көмірмен жұмыс істейді. Неміс компаниясы 500 МВт жел электр стансасын бірлесіп салуды ұсынады. Бірақ 4 жыл керек, аванс — 12 млрд ₸.",adv:"Энергетика министрлігі: «Жел — жақсы, бірақ 4 жылдағы қысқы ажырату қаупін ескеріңіз»",c:[{n:"Жел электр стансасы — келісім жасау",cost:"−12 млрд ₸",tags:[["tpe","Экол +15"],["tpp","Халық +6"],["tpg","Баск +8"],["tnm","−12 млрд"]],fx:{eco:15,ppl:6,gov:8,mon:-12},cq:{t:"mixed",tt:"Шарт жасалды, бірақ қыста ажырату болды",b:"3 ауданда 6 сағат жарық болмады. 4 жылдан кейін таза энергия және тәуелсіздік. ESG рейтингі өсті.",d:"2 кезеңнен кейін: Халық −8, Экол +5"}},{n:"Сүзгілер орнату — ТЭЦ жұмысын жалғастыру",cost:"−5 млрд ₸",tags:[["tne","Экол −5"],["tpp","Халық +12"],["tng","Баск −4"],["tnm","−5 млрд"]],fx:{eco:-5,ppl:12,gov:-4,mon:-5},cq:{t:"bad",tt:"Сүзгілер орнатылды, көмір жанып тұр",b:"Түтін 20% азайды. Инвесторлар ESG стандартына сай емес деп жобаларды тоқтатты.",d:"3 кезеңнен кейін: Баск −10, Экол −8"}}]},
+    {tag:"Су / Арал",txt:"Кіші Аралдың деңгейі тұрақтады. Қызылорда диқандары Сырдарядан күріш үшін су талап етеді. Берсе — теңіз тағы тартылады.",adv:"Гидрологтар: «Күріш суды бидайдан 3 есе жұтады. Балама — қуаңшылыққа төзімді дақылдарға субсидия»",c:[{n:"Диқандарға су беру, күрішті сақтау",cost:"−3 млрд ₸",tags:[["tpp","Халық +15"],["tne","Экол −22"],["tng","Баск −5"]],fx:{eco:-22,ppl:15,gov:-5,mon:-3},cq:{t:"bad",tt:"Арал тағы тарта бастады",b:"Деңгей 40 см төмендеді. Аральск зауыты екі есе азайды. БҰҰ «экологиялық регрессия» тізіміне кірді.",d:"2 кезеңнен кейін: Экол −15, Халық −12"}},{n:"Бидайға өтуге субсидия — теңізді сақтау",cost:"−8 млрд ₸",tags:[["tpe","Экол +10"],["tnp","Халық −8"],["tpg","Баск +12"],["tnm","−8 млрд"]],fx:{eco:10,ppl:-8,gov:12,mon:-8},cq:{t:"good",tt:"Теңіз сақталды, диқандар наразы",b:"GEF гранты — $40 млн. Арал жобасы БҰҰ оқулықтарына кейс ретінде кірді.",d:"2 кезеңнен кейін: Ақша +15 млрд, Баск +8"}}]},
+    {tag:"Алматы / Смог",txt:"Алматы Азияның ең ластанған 10 қаласының бірі. 80 000 үй көмір жағады. Газдандыру қымбат, тыйым кедей отбасыларының наразылығын тудырады.",adv:"Әкімдік: «70% үй — орта деңгейден төмен. Күрт тыйым — әлеуметтік жарылыс»",c:[{n:"Тыйым салу (2026), штраф",cost:"−2 млрд ₸",tags:[["tpe","Экол +20"],["tnp","Халық −18"],["tng","Баск −10"]],fx:{eco:20,ppl:-18,gov:-10,mon:-2},cq:{t:"bad",tt:"Тыйым наразылыққа алып келді",b:"3 000 отбасы көшеге шықты. 40% үй заңсыз жақты. Смог 15% ғана азайды.",d:"1 кезеңнен кейін: Халық −10"}},{n:"Субсидия + кезеңдік өтпелі кезең",cost:"−18 млрд ₸",tags:[["tpe","Экол +12"],["tpp","Халық +10"],["tpg","Баск +15"],["tnm","−18 млрд"]],fx:{eco:12,ppl:10,gov:15,mon:-18},cq:{t:"good",tt:"Кезеңдік өтпелі кезең жұмыс істеді",b:"2 жылда 60 000 үй газға ауысты. PM2.5 35% азайды. ДСҰ прогресті мойындады.",d:"3 кезеңнен кейін: Экол +10"}}]},
+    {tag:"Тендер / Жемқорлық",txt:"Қоқыс зауытының тендері. Оңтүстік Корея (35% қымбат, 15 жыл кепілдік) және «ЭкоСервис» (арзан, 3 млрд пара). Шенеунік ишарат береді.",adv:"Сыбайлас жемқорлыққа қарсы қызмет: «Егер жарияланса — бүкіл әкімдік жауап береді»",c:[{n:"Оңтүстік Корея — ашық тендер",cost:"−25 млрд ₸",tags:[["tpe","Экол +15"],["tpp","Халық +8"],["tpg","Баск +25"],["tnm","−25 млрд"]],fx:{eco:15,ppl:8,gov:25,mon:-25},cq:{t:"good",tt:"Ашықтық сенімді нығайтты",b:"Transparency International +12 пункт. Делдал шенеунік жұмыстан шығарылды. Жүйеге сигнал берілді.",d:"2 кезеңнен кейін: Ақша +8 млрд"}},{n:"Параны қабылдау, «ЭкоСервис»",cost:"+3 млрд ₸ (қазір)",tags:[["tne","Экол −8"],["tnp","Халық −5"],["tng","Баск −30"],["trsk","Жемқорлық"]],fx:{eco:-8,ppl:-5,gov:-30,mon:3},cq:{t:"bad",tt:"8 айда ашылды",b:"Vlast.kz жариялады. Акімдік тергеуде. Зауыт нашар — өрт шықты. Залал паядан 4 есе",d:"1 кезеңнен кейін: Баск −20, Ақша −15 млрд"}}]},
+    {tag:"Жаңаөзен",txt:"КМГ мұнайшылары 40% жалақы өсімін талап етеді. 2 жұмысшы қаза болды. KMG: жалақы өсімі = дивидендтер −80 млрд.",adv:"Кәсіподақтар: «2011 жылды бәрі есте сақтайды. Екінші Жаңаөзен — саяси апат»",c:[{n:"Талаптарды қолдау, келіссөз",cost:"−15 млрд ₸",tags:[["tpp","Халық +22"],["tpg","Баск +15"],["tnm","−15 млрд"]],fx:{eco:0,ppl:22,gov:15,mon:-15},cq:{t:"good",tt:"Диалог шиеленісудің алдын алды",b:"Жалақы 28% өсті. Тәуелсіз комиссия жұмыс бастады. ILO оң баға берді.",d:"2 кезеңнен кейін: Халық +8"}},{n:"KMG жағы — наразылықты шектеу",cost:"0 ₸",tags:[["tnp","Халық −25"],["tng","Баск −20"],["tpm","+5 млрд"]],fx:{eco:0,ppl:-25,gov:-20,mon:5},cq:{t:"bad",tt:"Наразылық басылды, ашу жинақталды",b:"6 айдан кейін ереуіл кеңейді. HRW баяндама шығарды. KMG серіктестері тоқтатты.",d:"2 кезеңнен кейін: Халық −15, Баск −15"}}]},
+    {tag:"Балқаш / Қытай",txt:"Балқаш деңгейі жыл сайын 12 см төмендейді. Қытай ирригациясы ағынның 42% алады. Ашық келіссөз ШОС серіктесін ренжітуі мүмкін.",adv:"СІМ: «Қытай — ең ірі сауда серіктесіміз. Ашық қысым $8 млрд инвестиция келіссөзін жабады»",c:[{n:"ШОС-та ресми мәселе көтеру",cost:"Дипл. тәуекел",tags:[["tpe","Экол +18"],["tpg","Баск +12"],["tnp","Халық −5"],["tnm","−5 млрд"]],fx:{eco:18,ppl:-5,gov:12,mon:-5},cq:{t:"mixed",tt:"Келіссөздер басталды",b:"Қытай бір жобаны тоқтатты, бірақ комиссияға келісті. Квоталар 35% деңгейінде бекітілді.",d:"3 кезеңнен кейін: Экол +12, Ақша +10 млрд"}},{n:"Жасырын келіссөздер",cost:"−3 млрд ₸",tags:[["tne","Экол −5"],["tng","Баск −8"],["tnm","−3 млрд"]],fx:{eco:-5,ppl:0,gov:-8,mon:-3},cq:{t:"bad",tt:"Жасырын сәтсіздік",b:"Тығырыққа тірелді. Деңгей тағы 8 см. Үнсіздік жеке скандалға айналды.",d:"2 кезеңнен кейін: Экол −10, Баск −8"}}]},
+    {tag:"Жайылым / Дала",txt:"Ақтөбеде жайылымдардың 35% жойылды. Шаңды дауылдар 3-тен 11-ге дейін өсті. Диқандар: «Квота — банкрот». Квотасыз — 15 жылда дала жоқ.",adv:"ҚазҰАУ: «Жүктеме нормасы 2.3 есе асқан. Қалпына келтіру 7 жыл»",c:[{n:"Квота + диқандарға өтемақы",cost:"−10 млрд ₸",tags:[["tpe","Экол +20"],["tnp","Халық −10"],["tpg","Баск +10"],["tnm","−10 млрд"]],fx:{eco:20,ppl:-10,gov:10,mon:-10},cq:{t:"good",tt:"Қатаң бірақ дұрыс шешім",b:"3-жылы шөп қалпына келді. Дауыл 5-ке азайды. Шаруалар жылыжайға ауысты.",d:"3 кезеңнен кейін: Экол +10, Халық +8"}},{n:"Жемге субсидия, квотаны кейінге",cost:"−6 млрд ₸",tags:[["tne","Экол −12"],["tpp","Халық +8"],["tng","Баск −5"],["tnm","−6 млрд"]],fx:{eco:-12,ppl:8,gov:-5,mon:-6},cq:{t:"bad",tt:"Кейінге қалдырылған апат",b:"Дала 800 км² азайды. БҰҰ «экол. апат аймағы» мәртебесін берді.",d:"2 кезеңнен кейін: Экол −18"}}]},
+    {tag:"Астана / Метро",txt:"Астана күн сайын кептеліп жатыр. Жол кеңейту (300 үй бұзу) немесе метро — ұзақ, қымбат, бірақ мәңгілік.",adv:"Урбанистер: «Жаңа жол жаңа трафик тудырады. Метро 100 жыл жұмыс істейді»",c:[{n:"Метро салу",cost:"−40 млрд ₸",tags:[["tpe","Экол +12"],["tnp","Халық −8"],["tpg","Баск +15"],["tnm","−40 млрд"]],fx:{eco:12,ppl:-8,gov:15,mon:-40},cq:{t:"good",tt:"Ұзақ жол — дұрыс шешімге",b:"Бірінші желі — тәулігіне 80 000 жолаушы. Кептеліс 30% азайды. Орталық Азиядағы метро қалалар клубы.",d:"3 кезеңнен кейін: Халық +18, Экол +8"}},{n:"Жол кеңейту, үйлерді бұзу",cost:"−12 млрд ₸",tags:[["tne","Экол −8"],["tpp","Халық +5"],["tng","Баск −8"],["tnm","−12 млрд"]],fx:{eco:-8,ppl:5,gov:-8,mon:-12},cq:{t:"bad",tt:"Жедел шешім жаңа мәселелер тудырды",b:"300 отбасы қақтығыспен көшірілді. Кептеліс 2 жылда қайтты. БҰҰ адам құқықтары комитетіне жалоба.",d:"2 кезеңнен кейін: Халық −12, Баск −10"}}]},
+    {tag:"Barrick / Алтын",txt:"Канадалық Barrick $12 млрд алтын кен орнын игеруді ұсынады. Шарт: 10 жыл салықтан босату + әлсіз экобақылау. Жұмыссыздық 18%.",adv:"Экономистер: «Салықсыз 10 жылда мемлекет тек жұмыс орны алады. Қатаң шартта Barrick кетуі мүмкін»",c:[{n:"Barrick шарттарын қабылдау",cost:"0 (болашақ шығын)",tags:[["tpp","Халық +15"],["tne","Экол −18"],["tng","Баск −10"],["trsk","Ұзақ тәуекел"]],fx:{eco:-18,ppl:15,gov:-10,mon:8},cq:{t:"bad",tt:"Жұмыс орны бар, табиғат зардап шегеді",b:"3 жылдан кейін қалдық қоймасы жарылды. Ертіс цианидпен ластанды. Залал $800 млн.",d:"2 кезеңнен кейін: Экол −20, Халық −10"}},{n:"Келіссөз: 5-жылдан салық + бақылау",cost:"Тәуекел",tags:[["tpe","Экол +5"],["tpp","Халық +8"],["tpg","Баск +15"]],fx:{eco:5,ppl:8,gov:15,mon:3},cq:{t:"good",tt:"Қатаң ұстаным нәтиже берді",b:"Barrick 4 ай келіссөз жүргізді, бірақ келісті. Жоба «жауапты өндіру» үлгісіне айналды.",d:"2 кезеңнен кейін: Ақша +20 млрд"}}]},
+    {tag:"Оралмандар",txt:"Синьцзяннан 5 000 оралман отбасы келді. Мектеп, тұрғын үй, құжат керек. Бас тарту — Конституцияны бұзу.",adv:"Заңгерлер: «Оралмандар Конституция бойынша азамат. Бас тарту — тікелей заң бұзушылық»",c:[{n:"Толық бейімдеу бағдарламасы",cost:"−20 млрд ₸",tags:[["tpp","Халық +12"],["tpg","Баск +18"],["tne","Экол −5"],["tnm","−20 млрд"]],fx:{eco:-5,ppl:12,gov:18,mon:-20},cq:{t:"good",tt:"Интеграция сәтті болды",b:"3-жылы 60% шағын бизнес ашты. БҰҰ БҚЖБ мадақтады. Халықаралық көмек +$15 млн.",d:"2 кезеңнен кейін: Халық +10, Ақша +10 млрд"}},{n:"Минимум: тек құжаттар",cost:"−2 млрд ₸",tags:[["tnp","Халық −15"],["tng","Баск −18"],["tnm","−2 млрд"]],fx:{eco:0,ppl:-15,gov:-18,mon:-2},cq:{t:"bad",tt:"Гуманитарлық дағдарыс",b:"5 000 отбасы қысқы шатырлы лагерьде. Reuters пен BBC видеосы таралды. ЕО визасы тоқтатылды.",d:"1 кезеңнен кейін: Баск −15, Халық −10"}}]},
+    {tag:"Сексеуіл",txt:"Самрұқ мұнайлы еншілес компаниясы Қызылқұм сексеуіл ормандарында лицензия алды. «1 га сексеуіл 4 тонна құмды ұстайды. Кессеңіз — қайтымсыз».",adv:"Greenpeace Қазақстан: «10 жылда шөл Түркістанға жетеді»",c:[{n:"Орман аймағын тыйым",cost:"−5 млрд ₸",tags:[["tpe","Экол +22"],["tnp","Халық −8"],["tpg","Баск +12"],["tnm","−5 млрд"]],fx:{eco:22,ppl:-8,gov:12,mon:-5},cq:{t:"good",tt:"Орман сақталды",b:"ЮНЕСКО «Орталық Азияның жасыл мұрасы» тізіміне енгізді. Самрұқ балама учаске тапты.",d:"2 кезеңнен кейін: Экол +8"}},{n:"Рұқсат + 500 га жаңа орман шарты",cost:"−3 млрд ₸",tags:[["tne","Экол −10"],["tpp","Халық +12"],["tng","Баск −5"],["trsk","Қайтымсыз"]],fx:{eco:-10,ppl:12,gov:-5,mon:-3},cq:{t:"bad",tt:"Өтемдік отырғызу сәтсіз",b:"500 га қағазда — 15% өмір сүрді. 2 000 га ескі орман кесілді. Дауылдар күшейді.",d:"2 кезеңнен кейін: Экол −15, Халық −8"}}]},
+    {tag:"COP / Қорытынды",txt:"БҰҰ Қазақстанды COP-Орталық Азия саммитін өткізуге шақырды. Үлкен шығын, бірақ дүниеге жолды көрсету мүмкіндігі.",adv:"Елші: «Саммит өткізгендер 3–5 есе көп халықаралық инвестиция алды. Бірақ тек «көрсетер нәрсе» болса»",c:[{n:"Саммитті қабылдау",cost:"−15 млрд ₸",tags:[["tpe","Экол +10"],["tpp","Халық +8"],["tpg","Баск +20"],["tnm","−15 млрд"]],fx:{eco:10,ppl:8,gov:20,mon:-15},cq:{t:"good",tt:"Саммит бетбұрыс кезеңі болды",b:"$4 млрд «жасыл» инвестиция туралы 12 келісім. Балқаш пен Арал БҰҰ декларациясына кірді.",d:"2 кезеңнен кейін: Ақша +40 млрд, Баск +10"}},{n:"Бас тарту — ішкі жобаларға",cost:"−5 млрд ₸",tags:[["tpe","Экол +5"],["tpp","Халық +15"],["tng","Баск −5"],["tnm","−5 млрд"]],fx:{eco:5,ppl:15,gov:-5,mon:-5},cq:{t:"mixed",tt:"Прагматикалық таңдау",b:"10 000 ағаш, 200 күн панелі. Тұрғындар риза. Өзбекстан саммитті өткізіп $6 млрд алды.",d:null}}]}
+  ],
+  ru:[
+    {tag:"Энергетика",txt:"Балхашская ТЭЦ на угле обеспечивает 65% электричества. Немецкий концерн предлагает ветропарк 500 МВт. Срок — 4 года, аванс — 12 млрд ₸.",adv:"Минэнерго: «Ветер — хорошо, но 4 года без стабильной генерации — риск отключений зимой»",c:[{n:"Подписать соглашение о ветропарке",cost:"−12 млрд ₸",tags:[["tpe","Эко +15"],["tpp","Люди +6"],["tpg","Упр +8"],["tnm","−12 млрд"]],fx:{eco:15,ppl:6,gov:8,mon:-12},cq:{t:"mixed",tt:"Контракт подписан, но зимой отключения",b:"Три района без света 6 часов. Зато через 4 года — чистая энергия и независимость. ESG-рейтинг города вырос.",d:"Через 2 хода: Люди −8, Эко +5"}},{n:"Модернизировать ТЭЦ (фильтры)",cost:"−5 млрд ₸",tags:[["tne","Эко −5"],["tpp","Люди +12"],["tng","Упр −4"],["tnm","−5 млрд"]],fx:{eco:-5,ppl:12,gov:-4,mon:-5},cq:{t:"bad",tt:"Фильтры установлены, уголь горит дальше",b:"Смог −20%, горожане довольны. Но инвесторы заморозили проекты — не соответствует ESG.",d:"Через 3 хода: Упр −10, Эко −8"}}]},
+    {tag:"Вода / Арал",txt:"Малый Арал стабилизировался. Фермеры Кызылорды требуют воду для риса из Сырдарьи. Если дать — море снова начнёт мелеть.",adv:"Гидрологи: «Рис потребляет воды втрое больше пшеницы. Альтернатива — субсидии на засухоустойчивые культуры»",c:[{n:"Дать воду фермерам",cost:"−3 млрд ₸",tags:[["tpp","Люди +15"],["tne","Эко −22"],["tng","Упр −5"]],fx:{eco:-22,ppl:15,gov:-5,mon:-3},cq:{t:"bad",tt:"Арал снова начал мелеть",b:"Уровень −40 см. Аральский рыбзавод вдвое. ООН — «экологическая регрессия».",d:"Через 2 хода: Эко −15, Люди −12"}},{n:"Субсидировать переход на пшеницу",cost:"−8 млрд ₸",tags:[["tpe","Эко +10"],["tnp","Люди −8"],["tpg","Упр +12"],["tnm","−8 млрд"]],fx:{eco:10,ppl:-8,gov:12,mon:-8},cq:{t:"good",tt:"Море сохранено, фермеры недовольны",b:"Грант GEF — $40 млн. Аральский проект стал кейсом ООН.",d:"Через 2 хода: Деньги +15 млрд, Упр +8"}}]},
+    {tag:"Алматы / Смог",txt:"Алматы в топ-10 загрязнённых городов Азии. 80 000 домов жгут уголь. Газификация дорого, запрет вызовет протесты малоимущих.",adv:"Акимат: «70% угольных домов — семьи ниже среднего. Резкий запрет = социальный взрыв»",c:[{n:"Запретить уголь с 2026 г., штрафы",cost:"−2 млрд ₸",tags:[["tpe","Эко +20"],["tnp","Люди −18"],["tng","Упр −10"]],fx:{eco:20,ppl:-18,gov:-10,mon:-2},cq:{t:"bad",tt:"Запрет спровоцировал протесты",b:"3 000 семей вышли. 40% жгли уголь нелегально. Смог снизился лишь на 15%.",d:"Через 1 ход: Люди −10"}},{n:"Субсидировать газ + постепенный переход",cost:"−18 млрд ₸",tags:[["tpe","Эко +12"],["tpp","Люди +10"],["tpg","Упр +15"],["tnm","−18 млрд"]],fx:{eco:12,ppl:10,gov:15,mon:-18},cq:{t:"good",tt:"Постепенный переход сработал",b:"60 000 домов перешли на газ. PM2.5 −35%. ВОЗ отметила прогресс.",d:"Через 3 хода: Эко +10"}}]},
+    {tag:"Тендер / Коррупция",txt:"Тендер на мусорный завод. Hyundai (дороже на 35%, гарантия 15 лет) и «ЭкоСервис» (дешевле, откат 3 млрд). Чиновник намекает.",adv:"Антикоррупционная служба: «Если всплывёт — ответит весь акимат. Прецеденты в 2019 и 2022 гг. уже были»",c:[{n:"Выбрать Hyundai по честному тендеру",cost:"−25 млрд ₸",tags:[["tpe","Эко +15"],["tpp","Люди +8"],["tpg","Упр +25"],["tnm","−25 млрд"]],fx:{eco:15,ppl:8,gov:25,mon:-25},cq:{t:"good",tt:"Прозрачность укрепила доверие",b:"Transparency International +12 пунктов. Чиновник уволен — сигнал для системы.",d:"Через 2 хода: Деньги +8 млрд"}},{n:"Принять откат, выбрать «ЭкоСервис»",cost:"+3 млрд ₸ сейчас",tags:[["tne","Эко −8"],["tnp","Люди −5"],["tng","Упр −30"],["trsk","Коррупция"]],fx:{eco:-8,ppl:-5,gov:-30,mon:3},cq:{t:"bad",tt:"Схема вскрылась через 8 месяцев",b:"Vlast.kz опубликовал. Акимат заморожен. Завод — пожар через год.",d:"Через 1 ход: Упр −20, Деньги −15 млрд"}}]},
+    {tag:"Жанаозень",txt:"Нефтяники КМГ требуют +40% к зарплате. Погибли двое рабочих. КМГ: рост зарплат = дивиденды −80 млрд.",adv:"Профсоюзы: «2011 год все помнят. Второй Жанаозень — политическая катастрофа»",c:[{n:"Поддержать требования, переговоры",cost:"−15 млрд ₸",tags:[["tpp","Люди +22"],["tpg","Упр +15"],["tnm","−15 млрд"]],fx:{eco:0,ppl:22,gov:15,mon:-15},cq:{t:"good",tt:"Диалог предотвратил эскалацию",b:"Зарплаты +28% — компромисс. Независимая комиссия. ILO дало положительную оценку.",d:"Через 2 хода: Люди +8"}},{n:"Встать на сторону КМГ, ограничить протест",cost:"0 ₸",tags:[["tnp","Люди −25"],["tng","Упр −20"],["tpm","+5 млрд"]],fx:{eco:0,ppl:-25,gov:-20,mon:5},cq:{t:"bad",tt:"Подавлен, но гнев копится",b:"Через полгода — забастовка везде. HRW доклад. Партнёры КМГ поставили паузу.",d:"Через 2 хода: Люди −15, Упр −15"}}]},
+    {tag:"Балхаш / Китай",txt:"Балхаш падает на 12 см в год — ирригация в Китае забирает 42% стока. Открытые переговоры могут обидеть партнёра по ШОС.",adv:"МИД: «Китай — крупнейший торговый партнёр. Публичное давление закроет переговоры на $8 млрд»",c:[{n:"Поднять вопрос официально в ШОС",cost:"Дипл. риск",tags:[["tpe","Эко +18"],["tpg","Упр +12"],["tnp","Люди −5"],["tnm","−5 млрд"]],fx:{eco:18,ppl:-5,gov:12,mon:-5},cq:{t:"mixed",tt:"Переговоры начались",b:"Китай заморозил один проект, но согласился на комиссию. Квоты — 35%.",d:"Через 3 хода: Эко +12, Деньги +10 млрд"}},{n:"Тихие переговоры",cost:"−3 млрд ₸",tags:[["tne","Эко −5"],["tng","Упр −8"],["tnm","−3 млрд"]],fx:{eco:-5,ppl:0,gov:-8,mon:-3},cq:{t:"bad",tt:"Тихий провал",b:"Тупик. Экологи опубликовали спутниковые снимки. Молчание стало скандалом.",d:"Через 2 хода: Эко −10, Упр −8"}}]},
+    {tag:"Степь / Пастбища",txt:"Актюбинская область: перевыпас уничтожил 35% пастбищ. Пыльные бури 3→11 в год. Фермеры: «Квоты — разоримся». Без квот — пустыня через 15 лет.",adv:"КазНАУ: «Нагрузка превышена в 2.3 раза. Восстановление — 7 лет»",c:[{n:"Квоты + компенсации фермерам",cost:"−10 млрд ₸",tags:[["tpe","Эко +20"],["tnp","Люди −10"],["tpg","Упр +10"],["tnm","−10 млрд"]],fx:{eco:20,ppl:-10,gov:10,mon:-10},cq:{t:"good",tt:"Жёсткое, но правильное решение",b:"На 3-й год трава восстановилась. Бури сократились до 5. Фермеры перешли на теплицы.",d:"Через 3 хода: Эко +10, Люди +8"}},{n:"Субсидировать корм, отложить квоты",cost:"−6 млрд ₸",tags:[["tne","Эко −12"],["tpp","Люди +8"],["tng","Упр −5"],["tnm","−6 млрд"]],fx:{eco:-12,ppl:8,gov:-5,mon:-6},cq:{t:"bad",tt:"Отложенная катастрофа",b:"Деградация ускорилась. Пустыня +800 км². ООН — «зона экологического бедствия».",d:"Через 2 хода: Эко −18"}}]},
+    {tag:"Астана / Метро",txt:"Астана задыхается от пробок. Расширить дорогу (снос 300 домов) или строить метро — долго, дорого, навсегда.",adv:"Урбанисты: «Каждая новая дорога генерирует новый трафик. Метро работает 100 лет»",c:[{n:"Начать строительство метро",cost:"−40 млрд ₸",tags:[["tpe","Эко +12"],["tnp","Люди −8"],["tpg","Упр +15"],["tnm","−40 млрд"]],fx:{eco:12,ppl:-8,gov:15,mon:-40},cq:{t:"good",tt:"Долгий путь к правильному решению",b:"Первая ветка — 80 000 пасс/день. Пробки −30%. Астана в клубе городов ЦА с метро.",d:"Через 3 хода: Люди +18, Эко +8"}},{n:"Расширить проспект, снести квартал",cost:"−12 млрд ₸",tags:[["tne","Эко −8"],["tpp","Люди +5"],["tng","Упр −8"],["tnm","−12 млрд"]],fx:{eco:-8,ppl:5,gov:-8,mon:-12},cq:{t:"bad",tt:"Быстрое решение создало новые проблемы",b:"300 семей переселены с конфликтами. Пробки вернулись через 2 года. Дело в комитете ООН.",d:"Через 2 хода: Люди −12, Упр −10"}}]},
+    {tag:"Barrick / Золото",txt:"Barrick предлагает освоить месторождение $12 млрд. Условие: 10 лет без налогов + слабый экоконтроль. Безработица 18%.",adv:"Экономисты: «Без налогов 10 лет государство получит лишь рабочие места»",c:[{n:"Принять условия Barrick",cost:"0 (потери позже)",tags:[["tpp","Люди +15"],["tne","Эко −18"],["tng","Упр −10"],["trsk","Долгоср. риск"]],fx:{eco:-18,ppl:15,gov:-10,mon:8},cq:{t:"bad",tt:"Занятость есть, природа страдает",b:"Через 3 года — прорыв дамбы. Иртыш загрязнён цианидами. Ущерб $800 млн.",d:"Через 2 хода: Эко −20, Люди −10"}},{n:"Переговоры: налоги с 5-го года + контроль",cost:"Риск ухода",tags:[["tpe","Эко +5"],["tpp","Люди +8"],["tpg","Упр +15"]],fx:{eco:5,ppl:8,gov:15,mon:3},cq:{t:"good",tt:"Жёсткая позиция дала результат",b:"Barrick согласился. Проект — образец ответственной добычи в регионе.",d:"Через 2 хода: Деньги +20 млрд"}}]},
+    {tag:"Оралманы",txt:"5 000 семей оралманов из Синьцзяна. Нужны школы, жильё, документы. Отказ — нарушение Конституции.",adv:"Юристы: «Оралманы — граждане по Конституции. Отказ — прямое нарушение закона»",c:[{n:"Полная программа адаптации",cost:"−20 млрд ₸",tags:[["tpp","Люди +12"],["tpg","Упр +18"],["tne","Эко −5"],["tnm","−20 млрд"]],fx:{eco:-5,ppl:12,gov:18,mon:-20},cq:{t:"good",tt:"Интеграция прошла успешно",b:"На 3-й год 60% открыли малый бизнес. УВКБ ООН похвалило Казахстан.",d:"Через 2 хода: Люди +10, Деньги +10 млрд"}},{n:"Минимум: только документы",cost:"−2 млрд ₸",tags:[["tnp","Люди −15"],["tng","Упр −18"],["tnm","−2 млрд"]],fx:{eco:0,ppl:-15,gov:-18,mon:-2},cq:{t:"bad",tt:"Гуманитарный кризис",b:"5 000 семей в палатках зимой. Reuters и BBC. Переговоры с ЕС заморожены.",d:"Через 1 ход: Упр −15, Люди −10"}}]},
+    {tag:"Саксаул",txt:"«Дочка» Самрук-Казыны получила лицензию в зоне саксауловых лесов Кызылкума — единственного барьера от пустыни. Greenpeace: «Необратимо». 3 000 рабочих мест.",adv:"Greenpeace: «1 га саксаула удерживает 4 тонны песка. Через 10 лет песок дойдёт до Туркестана»",c:[{n:"Запретить добычу в зоне леса",cost:"−5 млрд ₸",tags:[["tpe","Эко +22"],["tnp","Люди −8"],["tpg","Упр +12"],["tnm","−5 млрд"]],fx:{eco:22,ppl:-8,gov:12,mon:-5},cq:{t:"good",tt:"Лес сохранён",b:"ЮНЕСКО — «Зелёное наследие ЦА». Самрук нашёл другой участок.",d:"Через 2 хода: Эко +8"}},{n:"Разрешить с условием — 500 га посадок",cost:"−3 млрд ₸",tags:[["tne","Эко −10"],["tpp","Люди +12"],["tng","Упр −5"],["trsk","Необратимо"]],fx:{eco:-10,ppl:12,gov:-5,mon:-3},cq:{t:"bad",tt:"Посадки провалились",b:"500 га на бумаге — выжило 15%. 2 000 га старого леса вырублены. Бури усилились.",d:"Через 2 хода: Эко −15, Люди −8"}}]},
+    {tag:"COP / Итог",txt:"ООН предлагает Казахстану принять COP-Central Asia. Большие расходы, но шанс показать миру свой путь.",adv:"Посол: «Те, кто принимал COP, получали инвестиций в 3–5 раз больше затрат. Но только если есть что показать»",c:[{n:"Принять саммит — показать миру",cost:"−15 млрд ₸",tags:[["tpe","Эко +10"],["tpp","Люди +8"],["tpg","Упр +20"],["tnm","−15 млрд"]],fx:{eco:10,ppl:8,gov:20,mon:-15},cq:{t:"good",tt:"Саммит стал поворотным моментом",b:"$4 млрд «зелёных» инвестиций. Балхаш и Арал — в декларации ООН. Казахстан в Совете ООН.",d:"Через 2 хода: Деньги +40 млрд, Упр +10"}},{n:"Отказаться — вложить в внутренние проекты",cost:"−5 млрд ₸",tags:[["tpe","Эко +5"],["tpp","Люди +15"],["tng","Упр −5"],["tnm","−5 млрд"]],fx:{eco:5,ppl:15,gov:-5,mon:-5},cq:{t:"mixed",tt:"Прагматичный выбор",b:"10 000 деревьев, 200 солнечных панелей. Горожане довольны. Узбекистан принял саммит — $6 млрд.",d:null}}]}
+  ]
+};
+
+let L='kz',G={},log=[],delayed=[],order=[];
+
+function setLang(l,e){
+  L=l;
+  document.querySelectorAll('.lbt').forEach(b=>b.classList.remove('act'));
+  e.target.classList.add('act');
+  const t=TX[l];
+  document.getElementById('inst-t').textContent=t.it;
+  document.getElementById('inst-b').textContent=t.ib;
+  document.getElementById('start-btn').textContent=t.start;
+  document.getElementById('auth-lbl').textContent=l==='kz'?'Авторлар / Авторы':'Авторы / Авторлар';
+}
+
+function startGame(){
+  const t=TX[L];
+  G={eco:60,ppl:70,gov:65,mon:50,turn:0,score:0};
+  log=[];delayed=[];
+  const n=SC[L].length;
+  order=Array.from({length:n},(_,i)=>i);
+  for(let i=n-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+  document.getElementById('lang-screen').style.display='none';
+  document.getElementById('game-screen').style.display='block';
+  document.getElementById('g-role').textContent=t.role;
+  document.getElementById('sl-eco').textContent=t.eco;
+  document.getElementById('sl-ppl').textContent=t.ppl;
+  document.getElementById('sl-gov').textContent=t.gov;
+  document.getElementById('sl-mon').textContent=t.mon;
+  document.getElementById('bl-eco').textContent=t.eco;
+  document.getElementById('bl-ppl').textContent=t.ppl;
+  document.getElementById('bl-gov').textContent=t.gov;
+  document.getElementById('hl-lbl').textContent=t.hist;
+  document.getElementById('hlist').innerHTML='';
+  renderTurn();
+}
+
+function clamp(v){return Math.max(0,Math.min(100,v))}
+
+function renderTurn(){
+  const t=TX[L],s=SC[L][order[G.turn]];
+  document.getElementById('g-turn').textContent=`${G.turn+1} ${t.turn}`;
+  document.getElementById('ev-tag').textContent=s.tag;
+  document.getElementById('ev-txt').textContent=s.txt;
+  document.getElementById('ev-adv').textContent=t.adv+': '+s.adv;
+  document.getElementById('cqb').style.display='none';
+  document.getElementById('nb').style.display='none';
+  updateBars();updateRisk();
+  const g=document.getElementById('chg');g.innerHTML='';
+  s.c.forEach((c,i)=>{
+    const d=document.createElement('div');d.className='ch';
+    d.innerHTML=`<div class="chn">${c.n}</div><div class="chc">${c.cost}</div><div class="cht">${c.tags.map(tg=>`<span class="tg ${tg[0]}">${tg[1]}</span>`).join('')}</div>`;
+    d.onclick=()=>choose(i);g.appendChild(d);
+  });
+}
+
+function choose(idx){
+  const t=TX[L],s=SC[L][order[G.turn]],c=s.c[idx];
+  document.querySelectorAll('.ch').forEach(el=>el.classList.add('off'));
+  const fx=c.fx;
+  G.eco=clamp(G.eco+(fx.eco||0));G.ppl=clamp(G.ppl+(fx.ppl||0));
+  G.gov=clamp(G.gov+(fx.gov||0));G.mon=Math.max(0,G.mon+(fx.mon||0));
+  applyDelayed();
+  if(c.cq.d){const p=parseDel(c.cq.d);if(p)delayed.push({at:G.turn+p.d,fx:p.fx});}
+  const pts=Math.round(((fx.eco||0)+(fx.ppl||0)+(fx.gov||0))*1.5);
+  G.score+=pts;
+  log.push({tag:s.tag,ch:c.n,tt:c.cq.tt,bd:c.cq.b,dl:c.cq.d,fx,pts,type:c.cq.t});
+  showCQ(c.cq);addHist(s.tag,c.n,c.cq.t,pts,t);updateBars();updateRisk();
+  const nb=document.getElementById('nb');nb.style.display='block';
+  const over=G.eco<=0||G.ppl<=0||G.gov<=0||G.mon<=0;
+  if(over){nb.textContent=t.fnext;nb.onclick=()=>endGame(false);}
+  else if(G.turn>=11){nb.textContent=t.fnext;nb.onclick=()=>endGame(true);}
+  else{nb.textContent=t.next;nb.onclick=nextTurn;}
+}
+
+function parseDel(s){
+  const m=s.match(/(\d+)/);if(!m)return null;
+  const d=parseInt(m[1]);
+  const e=(s.match(/Экол? ([+-]\d+)/)||s.match(/Эко ([+-]\d+)/)||[0,0])[1];
+  const p=(s.match(/(?:Халық|Люди) ([+-]\d+)/)||[0,0])[1];
+  const g=(s.match(/(?:Баск|Упр) ([+-]\d+)/)||[0,0])[1];
+  const mp=(s.match(/(?:Ақша|Деньги) \+(\d+)/)||[0,0])[1];
+  const mn=(s.match(/(?:Ақша|Деньги) -(\d+)/)||[0,0])[1];
+  return{d,fx:{eco:parseInt(e)||0,ppl:parseInt(p)||0,gov:parseInt(g)||0,mon:mp?parseInt(mp):mn?-parseInt(mn):0}};
+}
+
+function applyDelayed(){
+  delayed=delayed.filter(d=>{
+    if(d.at<=G.turn){
+      G.eco=clamp(G.eco+(d.fx.eco||0));G.ppl=clamp(G.ppl+(d.fx.ppl||0));
+      G.gov=clamp(G.gov+(d.fx.gov||0));G.mon=Math.max(0,G.mon+(d.fx.mon||0));
+      return false;
+    }return true;
+  });
+}
+
+function showCQ(cq){
+  const b=document.getElementById('cqb');
+  b.className='cqb '+(cq.t==='good'?'cqg':cq.t==='bad'?'cqbad':'cqm');
+  document.getElementById('cqt').textContent=cq.tt;
+  document.getElementById('cqd').textContent=cq.b;
+  document.getElementById('cql').textContent=cq.d||'';
+  b.style.display='block';
+}
+
+function addHist(tag,ch,type,pts,t){
+  const list=document.getElementById('hlist');
+  const d=document.createElement('div');d.className='hi';
+  const col=type==='good'?'tpe':type==='bad'?'tne':'tpg';
+  const sign=pts>0?'+':'';
+  d.innerHTML=`<span>${tag}: ${ch.substring(0,28)}${ch.length>28?'...':''}</span><span class="hb tg ${col}">${sign}${pts} ${t.pts}</span>`;
+  list.insertBefore(d,list.firstChild);
+}
+
+function updateBars(){
+  const set=(sv,bar,bp,val,pfx)=>{
+    document.getElementById(sv).textContent=Math.round(val)+'%';
+    const b=document.getElementById(bar);b.style.width=Math.round(val)+'%';
+    b.className='bf '+pfx+(val<20?' d':val<35?' w':'');
+    document.getElementById(bp).textContent=Math.round(val)+'%';
+  };
+  set('sv-eco','bar-eco','bp-eco',G.eco,'bfe');
+  set('sv-ppl','bar-ppl','bp-ppl',G.ppl,'bfp');
+  set('sv-gov','bar-gov','bp-gov',G.gov,'bfg');
+  document.getElementById('sv-mon').textContent=Math.round(G.mon)+' млрд';
+}
+
+function updateRisk(){
+  const t=TX[L],mn=Math.min(G.eco,G.ppl,G.gov),s=document.getElementById('risk-s'),i=s.querySelector('i');
+  if(mn<25||G.mon<5){s.className='rs rsc';document.getElementById('risk-t').textContent=t.crit;i.className='ti ti-alert-triangle';}
+  else if(mn<42||G.mon<15){s.className='rs rsw';document.getElementById('risk-t').textContent=t.warn;i.className='ti ti-alert-circle';}
+  else{s.className='rs rsok';document.getElementById('risk-t').textContent=t.stable;i.className='ti ti-shield-check';}
+}
+
+function nextTurn(){
+  G.turn++;
+  document.querySelectorAll('.ch').forEach(el=>el.classList.remove('off'));
+  renderTurn();
+}
+
+function endGame(win){
+  document.getElementById('game-screen').style.display='none';
+  document.getElementById('end-screen').style.display='block';
+  const t=TX[L],avg=Math.round((G.eco+G.ppl+G.gov)/3),final=Math.round(G.score+avg*4+G.mon*1.5);
+  const success=win&&final>400;
+  drawAnim(success);
+  let title,sub;
+  if(!win){
+    const r=G.eco<=0?(L==='kz'?'Экологиялық апат.':'Экологическая катастрофа.'):G.ppl<=0?(L==='kz'?'Жаппай наразылық — министр кетті.':'Массовые протесты — вы отстранены.'):G.gov<=0?(L==='kz'?'Жемқорлық сенімді жойды.':'Коррупция разрушила доверие.'):(L==='kz'?'Қазына таусылды.':'Казна пуста.');
+    title=L==='kz'?'Тәжірибе аяқталды':'Игра завершена';sub=r;
+  } else if(final>700){title=L==='kz'?'Үлгілі министр':'Образцовый министр';sub=L==='kz'?'EcoCountry Орталық Азияның үлгісіне айналды. БҰҰ кеңесші ретінде шақырды.':'EcoCountry стал примером для ЦА. ООН пригласила вас советником.';}
+  else if(final>450){title=L==='kz'?'Тұрақты даму':'Устойчивое развитие';sub=L==='kz'?'Баланс табылды. Ел дамып жатыр.':'Баланс найден. Страна развивается.';}
+  else if(final>250){title=L==='kz'?'Тербелмелі тепе-теңдік':'Шаткий баланс';sub=L==='kz'?'Ел аман, бірақ мүмкіндік ашылмады.':'Страна выжила, но потенциал не раскрыт.';}
+  else{title=L==='kz'?'Өткізіп алған мүмкіндік':'Упущенный потенциал';sub=L==='kz'?'Шешімдер батылдықтан жұрдай болды.':'Решений смелости не хватило.';}
+  document.getElementById('end-t').textContent=title;
+  document.getElementById('end-s').textContent=sub;
+  document.getElementById('end-sc').textContent=final;
+  document.getElementById('end-sl').textContent=t.sof;
+  document.getElementById('end-aut-lbl').textContent=t.authlbl;
+  document.getElementById('rbtn').textContent=t.restart;
+  document.getElementById('end-sr').innerHTML=`
+    <div class="sc"><div class="scl">${t.eco}</div><div class="scv">${Math.round(G.eco)}%</div></div>
+    <div class="sc"><div class="scl">${t.ppl}</div><div class="scv">${Math.round(G.ppl)}%</div></div>
+    <div class="sc"><div class="scl">${t.gov}</div><div class="scv">${Math.round(G.gov)}%</div></div>
+    <div class="sc"><div class="scl">${t.mon}</div><div class="scv">${Math.round(G.mon)} млрд</div></div>
+  `;
+  document.getElementById('dlt').textContent=t.dlt;
+  const dl=document.getElementById('dlist');dl.innerHTML='';
+  log.forEach((item,i)=>{
+    const col=item.type==='good'?'tpe':item.type==='bad'?'tne':'tpg';
+    const sign=item.pts>0?'+':'';
+    const fxa=[item.fx.eco?`${t.eco} ${item.fx.eco>0?'+':''}${item.fx.eco}%`:'',item.fx.ppl?`${t.ppl} ${item.fx.ppl>0?'+':''}${item.fx.ppl}%`:'',item.fx.gov?`${t.gov} ${item.fx.gov>0?'+':''}${item.fx.gov}%`:'',item.fx.mon?`${item.fx.mon>0?'+':''}${item.fx.mon} млрд`:''].filter(Boolean);
+    dl.innerHTML+=`<div class="dli"><div class="dle">${i+1}. ${item.tag}</div><div class="dlc">${item.ch}</div><div class="dlb">${item.tt} — ${item.bd}</div>${item.dl?`<div class="dlb" style="font-style:italic;margin-top:2px">${item.dl}</div>`:''}<div class="dlf">${fxa.map(f=>`<span class="tg ${f.includes('-')?'tne':'tpe'}">${f}</span>`).join('')}<span class="tg ${col}">${sign}${item.pts} ${t.pts}</span></div></div>`;
+  });
+}
+
+function drawAnim(success){
+  const canvas=document.getElementById('ec'),ctx=canvas.getContext('2d');
+  canvas.width=680;canvas.height=240;
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,680,240);
+    if(success){
+      ctx.fillStyle='#85B7EB';ctx.fillRect(0,0,680,240);
+      const t=frame/60;
+      for(let i=0;i<4;i++){
+        const x=70+i*170+Math.sin(t+i)*10,y=38+Math.sin(t*.7+i)*10,r=28+i*4;
+        ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.75)';ctx.fill();
+        ctx.beginPath();ctx.arc(x+22,y+5,r*.65,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(x-18,y+7,r*.55,0,Math.PI*2);ctx.fill();
+      }
+      ctx.fillStyle='#639922';ctx.fillRect(0,130,680,110);
+      ctx.fillStyle='#3B6D11';
+      for(let i=0;i<18;i++){
+        const x=i*40+Math.sin(frame*.02+i)*3;
+        ctx.beginPath();ctx.ellipse(x,138,7,16+Math.sin(i*.9)*5,0,0,Math.PI*2);ctx.fill();
+      }
+      ctx.fillStyle='#97C459';
+      for(let i=0;i<10;i++){
+        const x=28+i*68+Math.sin(frame*.03+i)*5;
+        ctx.beginPath();ctx.moveTo(x,170);ctx.lineTo(x-13,138);ctx.lineTo(x+13,138);ctx.closePath();ctx.fill();
+        ctx.fillStyle='#639922';
+        ctx.beginPath();ctx.moveTo(x,156);ctx.lineTo(x-10,128);ctx.lineTo(x+10,128);ctx.closePath();ctx.fill();
+        ctx.fillStyle='#97C459';
+      }
+      ctx.fillStyle='#1D9E75';ctx.beginPath();ctx.ellipse(340,190,38,13,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#0F6E56';ctx.beginPath();ctx.ellipse(340,186,26,8,0,0,Math.PI*2);ctx.fill();
+      for(let i=0;i<5;i++){
+        const x=60+i*140+Math.sin(frame*.04+i*1.3)*7,y=215+Math.sin(frame*.05+i*1.6)*4;
+        ctx.beginPath();ctx.arc(x,y,11,0,Math.PI*2);ctx.fillStyle='rgba(255,215,60,.92)';ctx.fill();
+        ctx.fillStyle='rgba(180,130,0,.6)';ctx.beginPath();ctx.arc(x+4,y-4,6,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#27500A';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(':)',x,y+4);
+      }
+    } else {
+      ctx.fillStyle='#5F5E5A';ctx.fillRect(0,0,680,240);
+      const t=frame/60;
+      ctx.fillStyle='rgba(60,60,60,.45)';
+      for(let i=0;i<7;i++){
+        const x=i*100+Math.sin(t*.4+i)*4,y=25+Math.sin(t*.25+i)*8,r=38+i*3;
+        ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+      }
+      ctx.fillStyle='#444441';ctx.fillRect(0,118,680,122);
+      ctx.fillStyle='#2C2C2A';
+      for(let i=0;i<28;i++){
+        const x=i*26+Math.sin(t+i)*2;
+        ctx.fillRect(x,182+Math.sin(i)*.5*6,7,12+Math.sin(i*.5)*7);
+      }
+      ctx.fillStyle='#3C3489';
+      for(let j=0;j<3;j++){
+        const x=90+j*200,h=55+j*12;
+        ctx.fillRect(x-12,182-h,24,h);
+        for(let k=0;k<6;k++){
+          const sy=(frame*1.2+k*18+j*30)%90,op=Math.max(0,.55-(sy/90)*.55);
+          ctx.beginPath();ctx.arc(x+Math.sin(sy*.12)*7,182-h-sy,10+sy*.18,0,Math.PI*2);
+          ctx.fillStyle=`rgba(50,50,70,${op})`;ctx.fill();
+        }
+      }
+      ctx.fillStyle='rgba(90,70,10,.28)';ctx.fillRect(240,190,200,38);
+    }
+    frame++;if(frame<300)requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function restart(){
+  document.getElementById('end-screen').style.display='none';
+  const ls=document.getElementById('lang-screen');
+  ls.style.display='flex';ls.style.flexDirection='column';ls.style.alignItems='center';ls.style.justifyContent='center';
+}
+
+const ls=document.getElementById('lang-screen');
+ls.style.display='flex';ls.style.flexDirection='column';ls.style.alignItems='center';ls.style.justifyContent='center';
+</script>
